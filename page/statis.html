@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel - Statistics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .sidebar-item {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+    }
+    
+    .sidebar-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(5px);
+    }
+    
+    .sidebar-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 3px;
+      background: #3b82f6;
+      transform: scaleY(0);
+      transition: transform 0.2s ease;
+    }
+    
+    .sidebar-item:hover::before {
+      transform: scaleY(1);
+    }
+    
+    .sidebar-item.active {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .sidebar-item.active::before {
+      transform: scaleY(1);
+    }
+    
+    #background-side {
+      background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+      box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+      min-height: 100vh;
+    }
+    
+    .admin-avatar {
+      border: 3px solid #3b82f6;
+      transition: all 0.3s ease;
+    }
+    
+    .admin-avatar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    }
+    
+    .nav-item {
+      animation: fadeIn 0.5s ease forwards;
+    }
+    
+    .chart-container {
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+    
+    .chart-container:hover {
+      transform: translateY(-5px);
+    }
+    
+    .chart-title {
+      background: linear-gradient(90deg, #3b82f6, #10b981);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div class="flex">
+    <!-- Enhanced Sidebar -->
+    <div class="w-64 p-6 flex flex-col" id="background-side">
+      <div class="flex flex-col items-center mb-8">
+        <img src="../assets/icons8-admin-100.png" class="admin-avatar w-20 h-20 rounded-full mb-4">
+        <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">Admin Panel</h1>
+        <p class="text-gray-400 text-sm mt-2">Sales Analytics</p>
+      </div>
+      
+      <nav class="flex-1 space-y-3">
+        <a href="../service/user.php" class="sidebar-item flex items-center p-3 rounded-lg text-white group">
+          <i class="fas fa-users-cog mr-3 text-blue-400 group-hover:text-blue-300"></i>
+          <span>User Settings</span>
+          <i class="fas fa-chevron-right ml-auto text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+        </a>
+        
+        <a href="#" class="sidebar-item active flex items-center p-3 rounded-lg text-white group">
+          <i class="fas fa-chart-line mr-3 text-blue-400 group-hover:text-blue-300"></i>
+          <span>Statistics</span>
+          <i class="fas fa-chevron-right ml-auto text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+        </a>
+      </nav>
+      
+      <div class="mt-auto">
+        <a href="../login.php" class="sidebar-item flex items-center p-3 rounded-lg text-white group border-t border-gray-800 hover:border-gray-700">
+          <i class="fas fa-sign-out-alt mr-3 text-red-400 group-hover:text-red-300"></i>
+          <span>Logout</span>
+          <i class="fas fa-chevron-right ml-auto text-xs opacity-0 group-hover:opacity-100 transition-opacity"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-8 space-y-12">
+      <div class="chart-container">
+        <h1 class="chart-title text-center text-3xl font-bold mb-6">Data Penjualan Produk</h1>
+        <canvas id="productSalesChart" height="100"></canvas>
+      </div>
+      
+      <div class="chart-container">
+        <h1 class="chart-title text-center text-3xl font-bold mb-6">Tren Penjualan Bulanan</h1>
+        <canvas id="monthlyTrendChart" height="100"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Product Sales Chart
+    const productCtx = document.getElementById('productSalesChart');
+    new Chart(productCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Ayam Bakakak', 'Nasi Batagor', 'Cendol', 'Es Campur', 'Klepon', 'Nasi Liwet', 'Nasi Kuning', 'Sate Maranggi', 'Seblak', 'Sop Buah', 'Soto', 'Surabi'],
+        datasets: [{
+          label: 'Jumlah Penjualan',
+          data: [92, 100, 63, 84, 55, 65, 78, 43, 67, 33, 66, 76],
+          backgroundColor: [
+            'rgba(59, 130, 246, 0.7)',
+            'rgba(16, 185, 129, 0.7)',
+            'rgba(245, 158, 11, 0.7)',
+            'rgba(139, 92, 246, 0.7)',
+            'rgba(236, 72, 153, 0.7)',
+            'rgba(20, 184, 166, 0.7)',
+            'rgba(249, 115, 22, 0.7)',
+            'rgba(6, 182, 212, 0.7)',
+            'rgba(217, 70, 239, 0.7)',
+            'rgba(220, 38, 38, 0.7)',
+            'rgba(5, 150, 105, 0.7)',
+            'rgba(234, 88, 12, 0.7)'
+          ],
+          borderColor: [
+            'rgba(59, 130, 246, 1)',
+            'rgba(16, 185, 129, 1)',
+            'rgba(245, 158, 11, 1)',
+            'rgba(139, 92, 246, 1)',
+            'rgba(236, 72, 153, 1)',
+            'rgba(20, 184, 166, 1)',
+            'rgba(249, 115, 22, 1)',
+            'rgba(6, 182, 212, 1)',
+            'rgba(217, 70, 239, 1)',
+            'rgba(220, 38, 38, 1)',
+            'rgba(5, 150, 105, 1)',
+            'rgba(234, 88, 12, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              font: {
+                size: 14
+              }
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleFont: {
+              size: 16
+            },
+            bodyFont: {
+              size: 14
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: 'rgba(0, 0, 0, 0.05)'
+            },
+            ticks: {
+              stepSize: 20
+            }
+          },
+          x: {
+            grid: {
+              display: false
+            }
+          }
+        }
+      }
+    });
+
+    // Monthly Trend Chart
+    const trendCtx = document.getElementById('monthlyTrendChart');
+    new Chart(trendCtx, {
+      type: 'line',
+      data: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+        datasets: [{
+          label: 'Total Penjualan',
+          data: [45, 87, 53, 81, 85, 85, 48, 72, 55, 89, 72, 129],
+          fill: true,
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          borderColor: 'rgb(59, 130, 246)',
+          tension: 0.4,
+          pointBackgroundColor: 'rgb(59, 130, 246)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgb(59, 130, 246)',
+          pointRadius: 5,
+          pointHoverRadius: 7
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              font: {
+                size: 14
+              }
+            }
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleFont: {
+              size: 16
+            },
+            bodyFont: {
+              size: 14
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            min: 30,
+            max: 140,
+            grid: {
+              color: 'rgba(0, 0, 0, 0.05)'
+            },
+            ticks: {
+              stepSize: 20
+            }
+          },
+          x: {
+            grid: {
+              color: 'rgba(0, 0, 0, 0.05)'
+            }
+          }
+        }
+      }
+    });
+
+    // Add active class to current nav item
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentPage = window.location.pathname.split('/').pop();
+      const navItems = document.querySelectorAll('.sidebar-item');
+      
+      navItems.forEach(item => {
+        const link = item.getAttribute('href')?.split('/').pop();
+        if (link === currentPage) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

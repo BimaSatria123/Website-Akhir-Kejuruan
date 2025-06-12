@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exile&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1E40AF',
+                    },
+                },
+            },
+        }
+    </script>
+
+<body>
+    <Div class="flex justify-center">
+        <div id="content-body" class="mr-36">
+            <h1 class="text-7xl mt-60">Dahareun Ngenah</h1>
+            <h1 class="text-6xl mt-1">Murah-Murah</h1>
+            <h1 class="text-5xl mt-1">Ala-Ala Sunda</h1>
+            <h1 class="mt-2 text-gray-500">Marurah, Ngarenah, Narikmat pokonamah</h1>
+            <h1 class="text-gray-500">di website iye anjeun bisa meli makanan khas bandung dan sekitarnya.</h1>
+        </div>
+        <div class="">
+            <img src="./assets/nasi_campur-removebg-preview-removebg-preview.png" class=" mt-28"
+                id="image-content-body">
+        </div>
+
+    </Div>
+    <div class="button-container">
+        <a href="menu.php"><button class="button">Menuju Menu</button></a>
+    </div>
+
+    <h1 class="text-3xl" id="Menu-text">Menu Populer🔥</h1>
+    <div class="card-container">
+        <div class="card">
+            <img src="./assets/ayambakakak.png" alt="Ayam Bakakak" class="ml-8">
+            <div class="rating">⭐⭐⭐⭐⭐</div>
+            <p>Ayam Bakakak</p>
+        </div>
+
+        <div class="card">
+            <img src="./assets/nasi_kuning-removebg-preview.png" alt="Ayam Bakar" class="ml-8">
+            <div class="rating">⭐⭐⭐⭐</div>
+            <p>Nasi Kuning</p>
+        </div>
+
+        <div class="card">
+            <img src="./assets/cendol-removebg-preview.png" alt="Minuman Tradisional" class="ml-8">
+            <div class="rating">⭐⭐⭐⭐</div>
+            <p>Cendol</p>
+        </div>
+
+        <div class="card">
+            <img src="./assets/desert-removebg-preview.png" alt="Es Campur" class="ml-8">
+            <div class="rating">⭐⭐⭐</div>
+            <p>Es Campur</p>
+        </div>
+    </div>
+
+    <h1 class="text-center text-3xl font-bold mt-40">Data Penjualan Kami</h1>
+    <div class="mt-20" style="width: 1000px; margin-left: 250px;">
+        <canvas id="myChart"></canvas>
+    </div>
+
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="contact-info">
+                <h2>Hubungi Kami</h2>
+                <p>Jl.Tubagus Ismail Bawah, Bandung</p>
+                <p>Email: BimakASEP@gmail.com</p>
+                <p>Telepon: (+62) 0881-5116-330</p>
+
+                <div class="social-icons">
+                    <a href="#" title="Instagram">📷</a>
+                    <a href="#" title="Facebook">📘</a>
+                    <a href="#" title="Twitter">🐦</a>
+                    <a href="#" title="LinkedIn">💼</a>
+                </div>
+            </div>
+
+            <div class="map-container">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63350.80584864009!2d107.57311601621091!3d-6.903449398328979!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e650b7b2e6f1%3A0x301e8f1fc28b9c0!2sBandung%2C%20Kota%20Bandung%2C%20Jawa%20Barat!5e0!3m2!1sid!2sid!4v1716877770000"
+                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            &copy; 2025 BFC Company. Dibuat oleh Bima di Bandung.
+        </div>
+    </footer>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Ayam Bakakak', 'Nasi Kuning', 'Cendol', 'Es Campur'],
+            datasets: [{
+                label: 'Data Penjualan Product yang di beli',
+                data: [92, 100, 63, 84, 55,],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+
+                }
+            }
+        }
+    });
+</script>
+
+</html>
